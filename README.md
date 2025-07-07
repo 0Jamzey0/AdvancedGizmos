@@ -7,7 +7,7 @@
 ## 🔧 Features
 
 - ✅ **3D Geometric Shapes**
-  - Full sphere, half-sphere, cylinder, capsule, custom polygon, triangle
+  - Full sphere, Half-sphere, Cylinder, Capsule, Custom polygon, Triangle
 - ✅ **Mesh Wireframe Visualization**
 - ✅ **3D Bezier Curve Drawing**
 - ✅ **Transform Axis Renderer**
