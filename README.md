@@ -15,7 +15,7 @@
 - ✅ **Distance Measurement with Labels**
 - ✅ **Custom Isometric Text in Scene View**
 - ✅ **Custom Arrows & Directional Lines**
-- ✅ Designed with modularity and clarity in mind
+
 
 ---
 ![Preview](AdvancedGizmosPreview.png)
