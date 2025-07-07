@@ -2,8 +2,6 @@
 
 **Advanced Gizmos** is a powerful, developer-friendly extension to Unity's built-in Gizmos library. It offers a wide range of customizable and reusable visual debugging tools to enhance your scene visualization and editor workflow.
 
-Made by **Ali Essam**
-
 ---
 
 ## 🔧 Features
