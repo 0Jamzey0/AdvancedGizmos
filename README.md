@@ -18,7 +18,7 @@
 - ✅ Designed with modularity and clarity in mind
 
 ---
-![Preview](Assets/Docs/AdvancedGizmosPreview.png)
+![Preview](AdvancedGizmosPreview.png)
 
 
 ## 🖼️ Example Usage
