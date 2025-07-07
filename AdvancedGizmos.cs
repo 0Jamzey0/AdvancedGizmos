@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+
 using UnityEngine;
 using UnityEditor;
 
@@ -32,8 +33,13 @@ public static class AdvancedGizmos
 
     #if UNITY_EDITOR
     private static GUIStyle _gizmoTextStyle;
+    public static bool ShowPhysicsGizmos = true;
+    
     #endif
 
+    /// <summary>
+    /// Draws a 3D cylinder gizmo at a given position, rotation, height, and radius.
+    /// </summary>
     public static void DrawCylinder(Vector3 position, Quaternion rotation, float height, float radius, Color color, int SegmentsSize = DEFAULT_SEGMENTS)
     {
         Gizmos.color = color;
@@ -63,7 +69,10 @@ public static class AdvancedGizmos
             Gizmos.matrix = oldMatrix;
         }
     }
-
+    
+    /// <summary>
+    /// Draws a 3D capsule gizmo composed of a cylinder and two hemispheres.
+    /// </summary>
     public static void DrawCapsule(Vector3 position, Quaternion rotation, float height, float radius, Color color, int arcSegments = 16, int horizontalArcs = 8)
     {
         Gizmos.color = color;
@@ -96,7 +105,10 @@ public static class AdvancedGizmos
             Gizmos.matrix = oldMatrix;
         }
     }
-
+    
+    /// <summary>
+    /// Draws the wireframe of a mesh using its triangles.
+    /// </summary>
     public static void DrawWireMesh(Mesh mesh, Vector3 position, Quaternion rotation, Vector3 scale, Color color)
     {
         if (mesh == null) return;
@@ -122,6 +134,9 @@ public static class AdvancedGizmos
         Gizmos.matrix = oldMatrix;
     }
  
+    /// <summary>
+    /// Draws a half-sphere gizmo at a position, with adjustable segments and direction.
+    /// </summary>
     public static void DrawHalfSphere(Vector3 center, float radius, bool inverted, int arcSegments, int horizontalArcs)
     {
         Vector3 axis = inverted ? Vector3.down : Vector3.up;
@@ -156,6 +171,68 @@ public static class AdvancedGizmos
         }
     }
     
+    
+    
+    public static void DrawBezier(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, Color color, int segments = 20)
+    {
+        Gizmos.color = color;
+        Vector3 lastPos = p0;
+        for (int i = 1; i <= segments; i++)
+        {
+            float t = i / (float)segments;
+            Vector3 pos = Mathf.Pow(1 - t, 3) * p0 +
+                          3 * Mathf.Pow(1 - t, 2) * t * p1 +
+                          3 * (1 - t) * t * t * p2 +
+                          t * t * t * p3;
+            Gizmos.DrawLine(lastPos, pos);
+            lastPos = pos;
+        }
+    }
+    
+    public static void DrawFrustum(Vector3 position, Quaternion rotation, float fov, float maxRange, float aspect, Color color)
+    {
+        Gizmos.color = color;
+        Matrix4x4 oldMatrix = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
+        Gizmos.DrawFrustum(Vector3.zero, fov, maxRange, 0.01f, aspect);
+        Gizmos.matrix = oldMatrix;
+    }
+    
+    public static void DrawDistanceLabel(Vector3 a, Vector3 b, Color lineColor, string label = null)
+    {
+        Gizmos.color = lineColor;
+        Gizmos.DrawLine(a, b);
+#if UNITY_EDITOR
+        Handles.Label((a + b) / 2f, label ?? Vector3.Distance(a, b).ToString("F2"));
+#endif
+    }
+    
+    public static void DrawTransformAxes(Vector3 position, Quaternion rotation, float axisLength = 1f)
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(position, position + rotation * Vector3.right * axisLength);
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(position, position + rotation * Vector3.up * axisLength);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(position, position + rotation * Vector3.forward * axisLength);
+    }
+    
+    public static void DrawBox(Vector3 center, Vector3 size, Quaternion rotation, Color color)
+    {
+        Gizmos.color = color;
+        Matrix4x4 oldMatrix = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, size);
+        Gizmos.matrix = oldMatrix;
+    }
+
+
+
+
+
+    /// <summary>
+    /// Draws 3D text in the Scene view.
+    /// </summary>
     #if UNITY_EDITOR
     public static void DrawIsometricText(Vector3 position, string text, Color color,Font Font ,FontStyle FontStyle= FontStyle.Bold, int fontSize =12)
     {
@@ -192,6 +269,10 @@ public static class AdvancedGizmos
     }
     #endif
 
+    
+    /// <summary>
+    /// Draws a 3D arrow at a given position and direction.
+    /// </summary>
     #if UNITY_EDITOR
     public static void DrawArrow(Vector3 Position,Vector3 Direction,Color arrowColor,int arrowSize)
     {
@@ -200,6 +281,10 @@ public static class AdvancedGizmos
     }
     #endif
 
+    
+    /// <summary>
+    /// Draws a complete sphere.
+    /// </summary>
     public static void DrawFullSphere(Vector3 center, float radius, Color color, bool inverted = false)
     {
         Gizmos.color = color;
@@ -227,6 +312,9 @@ public static class AdvancedGizmos
     }
     
 
+    /// <summary>
+    /// Draws a 2D circle in the XZ plane.
+    /// </summary>
     public static void Draw2DCircle(Vector3 center, float radius)
     {
         Vector3[] points = GetCirclePoints(center, radius, DEFAULT_SEGMENTS);
@@ -237,6 +325,10 @@ public static class AdvancedGizmos
         }
     }
 
+    
+    /// <summary>
+    /// Draws a regular polygon with a given number of sides.
+    /// </summary>
     public static void DrawPolygon(Vector3 center, float radius, int sides, Color color)
     {
         if (sides < 3) return; // A polygon needs at least 3 sides
@@ -258,6 +350,10 @@ public static class AdvancedGizmos
         }
     }   
 
+    
+    /// <summary>
+    /// Draws a triangle using three specified 2D points.
+    /// </summary>
     public static void Draw2DTriangle(Vector3 a, Vector3 b, Vector3 c, Color color)
     {
         Gizmos.color = color;
@@ -267,6 +363,9 @@ public static class AdvancedGizmos
     }
 
 
+    /// <summary>
+    /// Draws a 3D equilateral triangle aligned with a surface normal.
+    /// </summary>
     public static void DrawRegularTriangle3D(Vector3 center, Vector3 normal, float size, Color color)
     {
         Gizmos.color = color;
@@ -287,7 +386,10 @@ public static class AdvancedGizmos
         Draw2DTriangle(points[0], points[1], points[2], color);
     }
 
-    internal static Vector3[] GetCirclePoints(Vector3 center, float radius, int segments)
+    /// <summary>
+    /// Returns an array of points forming a circle in the XZ plane.
+    /// </summary>
+    private static Vector3[] GetCirclePoints(Vector3 center, float radius, int segments)
     {
         Vector3[] points = new Vector3[segments];
         for(int i = 0; i < segments; i++)
